@@ -1,0 +1,1 @@
+export { default } from 'ember-power-select-typeahead-with-create/components/power-select-typeahead-with-create';
