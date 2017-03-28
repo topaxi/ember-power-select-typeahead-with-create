@@ -1,6 +1,6 @@
 {
   "name": "ember-power-select-typeahead-with-create",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Power Select with typeahead and create action",
   "keywords": [
     "ember-addon"
