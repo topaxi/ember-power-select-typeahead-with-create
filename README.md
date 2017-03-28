@@ -1,5 +1,7 @@
 # ember-power-select-typeahead-with-create
 
+[![Build Status](https://travis-ci.org/topaxi/ember-power-select-typeahead-with-create.svg?branch=master)](https://travis-ci.org/topaxi/ember-power-select-typeahead-with-create)
+
 This addon combines the functionality of
 [ember-power-select-typeahead](https://github.com/cibernox/ember-power-select-typeahead/)
 and
