@@ -1,77 +1,100 @@
-import Ember from 'ember';
-import $ from 'jquery';
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import {
   typeInSearch,
   clickTrigger,
   nativeMouseUp
-} from '../../helpers/ember-power-select';
+} from 'ember-power-select/test-support/helpers';
 
-moduleForComponent('power-select-typeahead-with-create', 'Integration | Component | power select typeahead with create', {
-  integration: true
-});
+module(
+  'Integration | Component | power select typeahead with create',
+  function(hooks) {
+    setupRenderingTest(hooks);
 
-test('it renders without error', function(assert) {
-  assert.expect(0);
+    hooks.beforeEach(function() {
+      this.actions = {};
+      this.send = (actionName, ...args) =>
+        this.actions[actionName].apply(this, args);
+    });
 
-  this.on('create', function() {});
+    test('it renders without error', async function(assert) {
+      assert.expect(0);
 
-  this.render(hbs`
-    {{power-select-typeahead-with-create oncreate=(action 'create')}}
-  `);
-});
+      this.actions.create = function() {};
 
-test('typeahead works', function(assert) {
-  assert.expect(4);
+      await render(hbs`
+      {{power-select-typeahead-with-create oncreate=(action 'create')}}
+    `);
+    });
 
-  this.set('options', [
-    { name: 'foo' },
-    { name: 'bar' },
-    { name: 'baz' },
-    { name: 'qux' }
-  ]);
-  this.on('create', function() {});
+    test('typeahead works', async function(assert) {
+      assert.expect(4);
 
-  this.render(hbs`
-    {{#power-select-typeahead-with-create
-      searchField='name'
-      extra=(hash labelPath='name')
-      selected=selected
-      options=options
-      onchange=(action (mut selected))
-      oncreate=(action 'create')
-      as |option|}}
-      {{option.name}}
-    {{/power-select-typeahead-with-create}}
-  `);
+      this.set('options', [
+        { name: 'foo' },
+        { name: 'bar' },
+        { name: 'baz' },
+        { name: 'qux' }
+      ]);
+      this.actions.create = function() {};
 
-  assert.equal($('.ember-power-select-dropdown').length, 0, 'The component is closed');
-  typeInSearch('ba');
-  assert.equal($('.ember-power-select-dropdown').length, 1, 'The component is opened');
-  nativeMouseUp('.ember-power-select-option:nth-child(3)');
-  assert.equal($('.ember-power-select-dropdown').length, 0, 'The component is closed again');
-  assert.equal(this.$('.ember-power-select-search-input').val(), 'baz', 'The input contains the selected option');
-});
+      await render(hbs`
+      {{#power-select-typeahead-with-create
+        searchField='name'
+        extra=(hash labelPath='name')
+        selected=selected
+        options=options
+        onchange=(action (mut selected))
+        oncreate=(action 'create')
+        as |option|}}
+        {{option.name}}
+      {{/power-select-typeahead-with-create}}
+    `);
 
-test('it executes the oncreate callback', function(assert) {
-  assert.expect(1);
+      assert.equal(
+        find('.ember-power-select-dropdown'),
+        null,
+        'The component is closed'
+      );
+      await typeInSearch('ba');
+      assert.notEqual(
+        find('.ember-power-select-dropdown'),
+        null,
+        'The component is opened'
+      );
+      await nativeMouseUp('.ember-power-select-option:nth-child(3)');
+      assert.equal(
+        find('.ember-power-select-dropdown'),
+        null,
+        'The component is closed again'
+      );
+      assert
+        .dom('.ember-power-select-search-input')
+        .hasValue('baz', 'The input contains the selected option');
+    });
 
-  this.on('create', itemName => {
-    assert.equal(itemName, 'Foo Bar');
-  });
+    test('it executes the oncreate callback', async function(assert) {
+      assert.expect(1);
 
-  this.render(hbs`
-    {{#power-select-typeahead-with-create
-      options=items
-      oncreate=(action "create")
-      renderInPlace=true as |item|
-      }}
-      {{item.name}}
-    {{/power-select-typeahead-with-create}}
-  `);
+      this.actions.create = itemName => {
+        assert.equal(itemName, 'Foo Bar');
+      };
 
-  clickTrigger();
-  Ember.run(() => typeInSearch('Foo Bar'));
-  nativeMouseUp('.ember-power-select-option:nth-child(1)');
-});
+      await render(hbs`
+      {{#power-select-typeahead-with-create
+        options=items
+        oncreate=(action "create")
+        renderInPlace=true as |item|
+        }}
+        {{item.name}}
+      {{/power-select-typeahead-with-create}}
+    `);
+
+      await clickTrigger();
+      await typeInSearch('Foo Bar');
+      await nativeMouseUp('.ember-power-select-option:nth-child(1)');
+    });
+  }
+);
