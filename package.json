@@ -21,8 +21,8 @@
     "ember-cli-babel": "^5.1.7",
     "ember-cli-htmlbars": "^1.1.1",
     "ember-power-select": "^1.0.0",
-    "ember-power-select-typeahead": "^0.5.6",
-    "ember-power-select-with-create": "^0.2.6"
+    "ember-power-select-typeahead": "^0.7.2",
+    "ember-power-select-with-create": "^0.6.1"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
