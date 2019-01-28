@@ -1,10 +1,8 @@
 {
   "name": "ember-power-select-typeahead-with-create",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Power Select with typeahead and create action",
-  "keywords": [
-    "ember-addon"
-  ],
+  "keywords": ["ember-addon"],
   "repository": "https://github.com/topaxi/ember-power-select-typeahead-with-create.git",
   "license": "MIT",
   "author": "Damian Senn <damian.senn@topaxi.codes>",
